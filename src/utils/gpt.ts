@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import 'dotenv/config';
-import { IMessage } from '../db/Message';
+import { IMessage } from '../../db/Message';
 import { AiModels } from '../types/types';
 import { isValidAiModel } from '../types/typeguards';
 import { DEFAULT_AI_MODEL } from './consts';
@@ -28,13 +28,25 @@ export const answerWithChatGPT = async (
         ...formattedMessages,
       ],
     });
-
-    return (
-      response.choices[0].message.content ??
-      'Пришел пустой ответ от AI-модели, обратитесь к администратору'
-    );
+    
+    if (response.choices[0].message.content === null) {
+  throw new Error('Content is null');
+}
+return response.choices[0].message.content;
+    // return response.choices[0].message.content ?? '';
   } catch (error) {
     const err = error as Error;
     throw err;
   }
+};
+
+export const generateImage = async (prompt: string): Promise<string | undefined> => {
+  const response = await openai.images.generate({
+    model: "dall-e-3",
+    prompt,
+    n: 1,
+    size: "1024x1024",
+  });
+
+  return response.data[0].url;
 };

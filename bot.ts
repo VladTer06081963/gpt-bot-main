@@ -3,15 +3,21 @@ import mongoose from 'mongoose';
 import { Bot, GrammyError, HttpError, session } from 'grammy';
 import { User as TelegramUser } from '@grammyjs/types';
 import { hydrate } from '@grammyjs/hydrate';
-import { MyContext, AiModelsLabels } from './types/types';
-import { isValidAiModel } from './types/typeguards';
+import {
+  conversations,
+  createConversation,
+} from "@grammyjs/conversations";//new
+
+import { MyContext, AiModelsLabels } from './src/types/types';
+import { isValidAiModel } from './src/types/typeguards';
 import User from './db/User';
 import Chat from './db/Chat';
 import Message from './db/Message';
-import { answerWithChatGPT } from './utils/gpt';
-import { MAX_HISTORY_LENGTH } from './utils/consts';
+import { answerWithChatGPT } from './src/utils/gpt';
+import { MAX_HISTORY_LENGTH } from './src/utils/consts';
 import logger from './logger';
-import { getAnalytics, changeModel } from './commands';
+import { getAnalytics, changeModel } from './src/commands';
+import { imageConversation } from './src/conversations/imageConversation';//new
 
 if (!process.env.BOT_API_KEY) {
   throw new Error('BOT_API_KEY is not defined');
@@ -20,6 +26,8 @@ const bot = new Bot<MyContext>(process.env.BOT_API_KEY);
 
 bot.use(session({ initial: () => ({}) }));
 bot.use(hydrate());
+bot.use(conversations());//new
+bot.use(createConversation(imageConversation));//new
 
 bot.api.setMyCommands([
   {
@@ -29,6 +37,10 @@ bot.api.setMyCommands([
   {
     command: 'newchat',
     description: 'Начать новый чат',
+  },
+   {
+    command: 'image',
+    description: 'Сгенерировать изображение',//new
   },
   {
     command: 'models',
@@ -84,10 +96,13 @@ bot.command('newchat', async (ctx) => {
 
     await ctx.reply('Новый чат создан. Пожалуйста, введите ваш вопрос.');
   } catch (error) {
-    await ctx.reply('Произошла ошибка при создании нового чата. Пожалуйста, попробуйте позже.');
+    await ctx.reply('Произошла ошибка при создании нового чата. Пожалуйста, попробуйте позже или обратитесь в поддержку');
     logger.error('Error in /newchat command:', error);
   }
 });
+bot.command('image', async (ctx) => {
+  await ctx.conversation.enter("imageConversation");
+});//new
 bot.command('models', changeModel);
 
 // Admin commands
@@ -170,6 +185,11 @@ bot.on('message:text', async (ctx) => {
     const selectedModelName = user.selectedModel;
     const answer = await answerWithChatGPT(history, selectedModelName);
 
+if (!answer) {
+      await responseMessage.editText('Произошла ошибка при генерации ответа. Пожалуйста, попробуйте позже или обратитесь в поддержку.');
+      return;
+    }
+
     await Message.create({
       chatId: chat._id,
       userId: user._id,
@@ -219,7 +239,7 @@ async function startBot() {
 }
 
 startBot();
-function isValidModel(selectedModel: string) {
-  throw new Error('Function not implemented.');
-}
+// function isValidModel(selectedModel: string) {
+//   throw new Error('Function not implemented.');
+// }
 
