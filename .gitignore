@@ -1,0 +1,11 @@
+.env
+.env.local
+
+node_modules
+package-lock.json
+history
+
+combined.log
+error.log
+
+dist
