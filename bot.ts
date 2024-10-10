@@ -62,16 +62,17 @@ bot.command('start', async (ctx) => {
         telegramId: id,
         firstName: first_name,
         userName: username,
+        
       });
       await responseMsg.editText('Ваш персональный чат-бот создан. Пожалуйста, введите ваш вопрос');
     } else {
       await ctx.reply('Пожалуйста, введите ваш вопрос');
     }
-
+    
     const chat = await Chat.create({
       userId: user._id,
     });
-
+    
     ctx.session.chatId = chat._id.toString();
   } catch (error) {
     await ctx.reply('Произошла ошибка при создании персонального чат-бота. Пожалуйста, попробуйте позже.');
@@ -80,6 +81,7 @@ bot.command('start', async (ctx) => {
 });
 bot.command('newchat', async (ctx) => {
   const { id } = ctx.from as TelegramUser;
+  console.log(id);
 
   try {
     const user = await User.findOne({ telegramId: id });
@@ -94,6 +96,8 @@ bot.command('newchat', async (ctx) => {
 
     ctx.session.chatId = chat._id.toString();
 
+    // Вывод ID пользователя и ID чата
+await ctx.reply(`Новый чат создан. Пожалуйста, введите ваш вопрос.`);
     await ctx.reply('Новый чат создан. Пожалуйста, введите ваш вопрос.');
   } catch (error) {
     await ctx.reply('Произошла ошибка при создании нового чата. Пожалуйста, попробуйте позже или обратитесь в поддержку');
@@ -104,7 +108,6 @@ bot.command('image', async (ctx) => {
   await ctx.conversation.enter("imageConversation");
 });//new
 bot.command('models', changeModel);
-
 // Admin commands
 bot.command('stats', getAnalytics);
 

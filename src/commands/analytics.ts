@@ -5,7 +5,8 @@ import Message from '../../db/Message';
 import logger from '../../logger';
 
 export const getAnalytics = async (ctx: MyContext) => {
-  const adminId = 265162348;
+  const adminId = 1045621572;
+  // const adminId = 265162348;
 
   if (!ctx.from || ctx.from.id !== adminId) {
     await ctx.reply('Доступ ограничен');
