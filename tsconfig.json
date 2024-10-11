@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES6", // Компиляция кода в ES6
     "module": "commonjs", // Используем CommonJS для модулей
-    "outDir": "./dist", // Папка для скомпилированных JS файлов
+    "outDir": "public", // Папка для скомпилированных JS файлов
     "strict": true, // Включаем строгую типизацию
     "esModuleInterop": true, // Совместимость с ES модулями
     "skipLibCheck": true // Пропустить проверку типов в библиотеках
