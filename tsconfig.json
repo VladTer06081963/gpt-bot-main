@@ -1,25 +1,30 @@
 {
   "compilerOptions": {
-    "target": "ES6", // Компиляция кода в ES6
-    "module": "commonjs", // Используем CommonJS для модулей
-    "outDir": "dist", // Папка для скомпилированных JS файлов
-    "strict": true, // Включаем строгую типизацию
-    "esModuleInterop": true, // Совместимость с ES модулями
-    "skipLibCheck": true // Пропустить проверку типов в библиотеках
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true
   },
-  "include": ["./**/*.ts"], // Включаем все TS файлы
-  "exclude": ["node_modules"] // Исключаем папку node_modules
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
 
 
 // {
 //   "compilerOptions": {
-//     "target": "ES6",
-//     "module": "commonjs",
-//     "outDir": "./dist",
-//     "strict": true,
-//     "esModuleInterop": true
+//     "target": "ES6", // Компиляция кода в ES6
+//     "module": "commonjs", // Используем CommonJS для модулей
+//     "outDir": "dist", // Папка для скомпилированных JS файлов
+//     "strict": true, // Включаем строгую типизацию
+//     "esModuleInterop": true, // Совместимость с ES модулями
+//     "skipLibCheck": true // Пропустить проверку типов в библиотеках
 //   },
-//   "include": ["bot.ts"],
-//   "exclude": ["node_modules"]
+//   "include": ["./**/*.ts"], // Включаем все TS файлы
+//   "exclude": ["node_modules"] // Исключаем папку node_modules
 // }
