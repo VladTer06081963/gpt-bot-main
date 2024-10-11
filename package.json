@@ -4,7 +4,8 @@
   "main": "bot.js",
   "scripts": {
     "start": "nodemon --exec ts-node bot.ts",
-    "build": "tsc",
+    "build": "[gpt-bot-main] build --output public",
+    "build1": "tsc",
     "start:prod": "node dist/bot.js"
   },
   "author": "",
