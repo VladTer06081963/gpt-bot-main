@@ -38,6 +38,7 @@ export const answerWithChatGPT = async (
   }
 };
 
+
 export const generateImage = async (prompt: string, quality: ImageGenerationQuality = ImageGenerationQuality.STANDARD): Promise<string | undefined> => {
   const response = await openai.images.generate({
     model: "dall-e-3",
